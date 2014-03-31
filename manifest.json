@@ -1,0 +1,17 @@
+{
+    "name": "Mobile to Chrome",
+    "version": "0.1",
+    "description": "Receive links from your phone",
+    "permissions": [
+        "tabs"
+    ],
+    "browser_action": {
+        "default_title": "Details",
+        "default_popup": "popup.html"
+    },
+    "background": {
+        "scripts": ["bg.js"]
+    },
+    "manifest_version": 2,
+    "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'"
+}
