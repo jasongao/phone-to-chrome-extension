@@ -6,6 +6,7 @@ var host = 'ws://mobile-to-chrome.herokuapp.com/';
 
 var registerID = function (ws) {
     ws.send(JSON.stringify({
+        command: 'setID',
         id: localStorage.id
     }));
 };
@@ -35,6 +36,18 @@ var createWS = function (){
         if (obj.url){
             if (localStorage.pass === obj.pass) {
                 chrome.tabs.create({ url: obj.url });
+                // Respond and let the server know that everything worked
+                ws.send(JSON.stringify({
+                    command: 'respond',
+                    resp: '200'
+                }));
+            }
+            else {
+                // Respond with unauthorized message
+                ws.send(JSON.stringify({
+                    command: 'respond',
+                    resp: '503'
+                }));
             }
         }
     };
