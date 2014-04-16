@@ -1,0 +1,206 @@
+@font-face {
+  font-family: 'VarelaRound';
+  font-style: normal;
+  font-weight: 400;
+  src: local('VarelaRound Regular'), local('VarelaRound-Regular'), url(VarelaRound-Regular.woff) format('woff');
+  src: url(VarelaRound-Regular.ttf) format('truetype');
+}
+
+body {
+    background: #37485d;
+    font-family: 'VarelaRound', sans-serif;
+    font-size: 16px;
+    height: 200px;
+    width: 600px;
+    margin: 0px;
+    color: #f0f0f0;
+    padding: 20px;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+}
+
+#uid {
+    font-weight: bold;
+}
+
+.bar {
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.logo {
+    cursor: default;
+    letter-spacing: -1px;
+    -webkit-user-select: none;
+    padding-bottom: 20px;
+}
+
+.title {
+    color: #aebdd3;
+    font-size: 24px;
+}
+
+.yellow {
+    color: #fce257;
+}
+
+.green {
+    color: #81c678;
+}
+
+.red {
+    color: #f0574b;
+}
+
+.blue {
+    color: #449cd6;
+}
+
+
+h4 {
+    font-size: 20px;
+    font-weight:normal;
+    margin:0px;
+    overflow:visible;
+    padding:0px;
+}
+
+#history {
+    height: 220px;
+    overflow-y: auto;
+    padding: 20px 0 20px 0;
+}
+
+.entry, .urlTitle, .url, .time {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.entry {
+    padding: 5px 0 3px 0;
+    width: 100%;
+}
+
+.urlTitle {
+    width: 35%;
+}
+
+.url, .time {
+    color: #818A96;
+    font-size: 14px;
+    padding: 0 10px 0 10px;
+}
+
+.url {
+    width: 40%;
+}
+
+.time {
+    float: right;
+    margin-top: 3px;
+}
+
+.favico {
+    position: relative;
+    top: -2px;
+}
+
+input, label {
+    display: block;
+}
+
+input {
+    font-size: 16px;
+    font-family: inherit;
+    height: 40px;
+}
+
+.input {
+    background-color: #2d3b4c;
+    outline: none;
+    border: none;
+    color: white;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 10px 0;
+    border-radius: 4px;
+}
+
+label {
+    float: left;
+}
+
+.option {
+    background-color: #81c678;
+    cursor: default;
+    outline: none;
+    border: none;
+    color: white;
+    float: right;
+    font-size: 10px;
+    padding: 5px;
+    margin: 0 0 10px 0;
+    border-radius: 4px;
+}
+
+.req {
+    background-color: #f0574b;
+}
+
+::-webkit-input-placeholder {
+   color: #6883ae;
+}
+
+#form:before, #form:after {
+  content: "";
+  display: table;
+}
+
+#form:after {
+  clear: both;
+}
+
+#form {
+  zoom:1; /* For IE 6/7 (trigger hasLayout) */
+}
+
+.uidDiv, .passDiv {
+    float: left;
+    width: 45%;
+}
+
+.uidDiv {
+    margin-right: 50px;
+}
+
+#save {
+    float: right;
+    margin-right: 7px;
+}
+
+.button {
+    background-color: #81c678;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    padding: 6px 24px;
+    text-decoration: none;
+    border: none;
+    outline: none;
+}
+
+.button:enabled:active {
+    position:relative;
+    top:1px;
+}
+
+.button:disabled {
+    opacity: 0.4;
+}

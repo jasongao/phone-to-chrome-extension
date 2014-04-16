@@ -10,15 +10,30 @@ var registerID = function (ws) {
         id: localStorage.id
     }));
 };
+var tabHistory = [];
+try {
+    tabHistory = JSON.parse(localStorage.tabHistory);
+}
+catch (e) {
+    console.log(e);
+}
+
+var addTab = function (tab) {
+    tabHistory.push(tab);
+    if (tabHistory.length > 10) {
+        tabHistory = tabHistory.slice(tabHistory.length - 10, tabHistory.length);
+    }
+    localStorage.tabHistory = JSON.stringify(tabHistory);
+};
 
 var createWS = function (){
 
     ws = new WebSocket(host);
-    ws.onopen = function() {
+    ws.onopen = function () {
         console.log('Opened');
         registerID(ws);
     };
-    ws.onmessage = function(message) {
+    ws.onmessage = function (message) {
         console.log('Received', message);
         var obj = {};
         try {
@@ -35,7 +50,12 @@ var createWS = function (){
         }
         if (obj.url){
             if (localStorage.pass === obj.pass) {
-                chrome.tabs.create({ url: obj.url });
+                chrome.tabs.create({
+                    url: obj.url
+                },
+                function (tab) {
+                    addTab(tab);
+                });
                 // Respond and let the server know that everything worked
                 ws.send(JSON.stringify({
                     command: 'respond',

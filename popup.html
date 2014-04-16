@@ -1,18 +1,71 @@
 <html>
 <head>
-    <title>Popup - Mobile to Chrome</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Popup - Phone to Chrome</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-    ID (enter this on your mobile): <span id='uid'>d12xsa</span>
-    <p>
-        <form id='form' action=''>
-            <span class='tip' title='A phrase that you enter here and on your mobile, to disallow others from misuing your ID and potentially spamming you'>Passphrase (optional, but recommended): </span>
-            <input type='password' id='pass'/>
-            <br>
-            <input type='submit' id='save' value='Save' disabled=""/>
-        </form>
-    </p>
+    <div class='bar'>
+        <h4 class='logo'>
+            phone<span class='blue'>to</span><span class='yellow'>ch</span><span class='green'>ro</span><span class='red'>me</span>
+        </h4>
+    </div>
+    <div>
+        <span class='title'>History</span>
+        <div id='history'>
+            You have no history available.
+            <div class='entry' data-url='http://google.com/'>
+                <img src='https://encrypted.google.com/images/google_favicon_128.png' width='16' class='favico'/>
+                <span class='urlTitle'>Popup - Phone to Chrome</span>
+                <span class='url'>http://google.com/#q=some things here that extend the link</span>
+                <span class='time'>12/04/2014</span>
+            </div>
+            <div class='entry'>
+                <img src='https://encrypted.google.com/images/google_favicon_128.png' width='16' class='favico'/>
+                <span class='urlTitle'>Schmoogle</span>
+                <span class='url'>http://google.com</span>
+                <span class='time'>5:04pm</span>
+            </div>
+            <div class='entry'>
+                <img src='https://encrypted.google.com/images/google_favicon_128.png' width='16' class='favico'/>
+                <span class='urlTitle'>Schmoogle</span>
+                <span class='url'>http://google.com</span>
+                <span class='time'>5:04pm</span>
+            </div>
+            <div class='entry'>
+                <img src='https://encrypted.google.com/images/google_favicon_128.png' width='16' class='favico'/>
+                <span class='urlTitle'>Schmoogle</span>
+                <span class='url'>http://google.com</span>
+                <span class='time'>5:04pm</span>
+            </div>
+            <div class='entry'>
+                <img src='https://encrypted.google.com/images/google_favicon_128.png' width='16' class='favico'/>
+                <span class='urlTitle'>Schmoogle</span>
+                <span class='url'>http://goooogle.com/thing</span>
+                <span class='time'>5:04pm</span>
+            </div>
+        </div>
+    </div>
+    <div>
+        <span class='title'>Settings</span>
+        <p>
+            <form id='form' action=''>
+                <div class='uidDiv'>
+                    <label for='uid'>ID for mobile app:</label>
+                    <span class='req option'>Required</span>
+                    <input type='text' id='uid' value='' class='input' disabled='disabled'/>
+                </div>
+
+                <div class='passDiv'>
+                    <label for='pass'>Passphrase: </label>
+                    <span class='option'>Optional</span>
+                    <input type='password' id='pass' class='input'/>
+                </div>
+                <br>
+                <input type='submit' id='save' value='Save' disabled='' class='button'/>
+            </form>
+        </p>
+    </div>
+
     <script type="text/javascript" src='popup.js'></script>
 </body>
 </html>

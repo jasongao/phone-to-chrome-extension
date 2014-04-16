@@ -1,6 +1,6 @@
 (function () {
     var uid = document.getElementById('uid');
-    uid.textContent = localStorage.id;
+    uid.value = localStorage.id;
 
     var pass = document.getElementById('pass');
     if (localStorage.pass) {
