@@ -88,6 +88,7 @@ h4 {
 .entry {
     padding: 5px 0 3px 0;
     width: 100%;
+    cursor: pointer;
 }
 
 .urlTitle {
