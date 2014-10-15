@@ -1,8 +1,9 @@
 localStorage.pass = localStorage.pass || '';
 var ws;
 
-var host = 'ws://mobile-to-chrome.herokuapp.com/';
-// var host = 'ws://localhost/';
+// var host = 'ws://mobile-to-chrome.herokuapp.com/';
+var host = 'ws://192.168.1.2/';
+var TEST_FOR_DEAD = 10; // in seconds
 
 var registerID = function () {
     ws.send(JSON.stringify({
@@ -22,6 +23,11 @@ catch (e) {
     console.log(e);
 }
 
+var clearHistory = function () {
+    localStorage.tabHistory = '[]';
+    tabHistory = [];
+};
+
 var addTab = function (tab) {
     tab.timeString = moment().format('DD/MM/YYYY');
     tabHistory.push(tab);
@@ -39,6 +45,15 @@ chrome.tabs.onUpdated.addListener(function (id, changeInfo, tab) {
         tabIDs.splice(index, 1);
     }
 });
+
+var lastCheckin = Date.now();
+var testConnection = function () {
+    if (Date.now() - lastCheckin > 2 * TEST_FOR_DEAD * 1000) {
+        console.log('Timed out. Retrying');
+        ws.onclose();
+    }
+    setTimeout(testConnection, TEST_FOR_DEAD * 1000);
+};
 
 var createWS = function (){
 
@@ -62,6 +77,13 @@ var createWS = function (){
             console.log('Received id', obj.id);
             localStorage.id = obj.id;
             registerID(ws);
+        }
+        else if (obj.command === 'checkIn') {
+            lastCheckin = Date.now();
+            console.log('Check in request');
+            ws.send(JSON.stringify({
+                command: 'checkingIn'
+            }));
         }
         if (obj.url){
             if (localStorage.pass === obj.pass) {
@@ -110,3 +132,4 @@ var createWS = function (){
 };
 
 createWS();
+testConnection();

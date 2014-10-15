@@ -1,6 +1,6 @@
 {
     "name": "Phone to Chrome",
-    "version": "0.1",
+    "version": "0.1.1",
     "description": "Receive links from your phone",
     "permissions": [
         "tabs"

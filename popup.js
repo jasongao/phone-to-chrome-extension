@@ -1,6 +1,8 @@
 (function () {
     var background = chrome.extension.getBackgroundPage();
 
+    var clearHistory = document.getElementById('clearHistory');
+
     var uid = document.getElementById('uid');
     uid.value = localStorage.id;
 
@@ -10,6 +12,15 @@
     }
 
     var save = document.getElementById('save');
+
+    var history = document.getElementById('history');
+    clearHistory.addEventListener('click', function () {
+        background.clearHistory();
+        while(history.lastChild && history.lastChild.id !== 'nohistory') {
+            history.removeChild(history.lastChild);
+        }
+        document.getElementById('nohistory').style.display = 'block';
+    }, false);
 
     pass.addEventListener('input', function (e) {
         console.log('Change');
@@ -29,7 +40,6 @@
         background.registerID();
     }, false);
 
-    var history = document.getElementById('history');
     window.addEntry = function (favico, title, url, timeString) {
         var entry = document.createElement('div');
         entry.className = 'entry';
@@ -65,7 +75,7 @@
         history.appendChild(entry);
     };
 
-    if (localStorage.tabHistory) {
+    if (localStorage.tabHistory.length > 2) {
         var tabHistory = JSON.parse(localStorage.tabHistory);
         tabHistory.reverse().forEach(function (tab) {
             addEntry(tab.favIconUrl, tab.title, tab.url, tab.timeString);
