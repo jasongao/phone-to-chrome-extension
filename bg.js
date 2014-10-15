@@ -1,15 +1,19 @@
 localStorage.pass = localStorage.pass || '';
 var ws;
 
-// var host = 'ws://mobile-to-chrome.herokuapp.com/';
-var host = 'ws://192.168.1.2/';
-var TEST_FOR_DEAD = 10; // in seconds
+var EXTENSION_VERSION = '0.1.2';
+var matchVersion = false; // Whether the host and the extension's versions match
 
+var host = 'ws://mobile-to-chrome.herokuapp.com/';
+// var host = 'ws://192.168.1.2/';
+
+var TEST_FOR_DEAD = 10; // in seconds
 var registerID = function () {
     ws.send(JSON.stringify({
         command: 'setID',
         id: localStorage.id,
-        pass: localStorage.pass
+        pass: localStorage.pass,
+        EXTENSION_VERSION: EXTENSION_VERSION
     }));
     console.log('Registered ID');
 };
@@ -48,6 +52,9 @@ chrome.tabs.onUpdated.addListener(function (id, changeInfo, tab) {
 
 var lastCheckin = Date.now();
 var testConnection = function () {
+    if (!matchVersion) {
+        return false;
+    }
     if (Date.now() - lastCheckin > 2 * TEST_FOR_DEAD * 1000) {
         console.log('Timed out. Retrying');
         ws.onclose();
@@ -76,7 +83,14 @@ var createWS = function (){
         if (obj.command === 'setID') {
             console.log('Received id', obj.id);
             localStorage.id = obj.id;
-            registerID(ws);
+            registerID();
+        }
+        else if (obj.command === 'verifyVersion') {
+            if (obj.EXTENSION_VERSION === EXTENSION_VERSION) {
+                console.log('Versions match, testing for connection');
+                matchVersion = true;
+                testConnection();
+            }
         }
         else if (obj.command === 'checkIn') {
             lastCheckin = Date.now();
@@ -132,4 +146,3 @@ var createWS = function (){
 };
 
 createWS();
-testConnection();
