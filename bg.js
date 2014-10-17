@@ -60,11 +60,12 @@ chrome.tabs.onUpdated.addListener(function (id, changeInfo, tab) {
 });
 
 var lastCheckin = Date.now();
+var retrying = false;
 var testConnection = function () {
     if (!matchVersion) {
         return false;
     }
-    if (Date.now() - lastCheckin > 2 * TEST_FOR_DEAD * 1000) {
+    if (retrying === false && Date.now() - lastCheckin > 2 * TEST_FOR_DEAD * 1000) {
         console.log('Timed out. Retrying');
         ws.onclose();
     }
@@ -72,9 +73,11 @@ var testConnection = function () {
 };
 
 var createWS = function (){
+    retrying = true;
 
     ws = new WebSocket(host);
     ws.onopen = function () {
+        retrying = false;
         console.log('Opened');
         registerID();
     };
