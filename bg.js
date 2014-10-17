@@ -151,7 +151,7 @@ var createWS = function (){
         console.log('Closed. Retrying...');
         setTimeout(function (){
             createWS();
-        }, 1000);
+        }, 5000);
     };
 };
 
