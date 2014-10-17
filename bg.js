@@ -1,15 +1,24 @@
 localStorage.pass = localStorage.pass || '';
 var ws;
 
-var EXTENSION_VERSION = '0.1.2';
+var EXTENSION_VERSION = '0.1.5';
 var matchVersion = false; // Whether the host and the extension's versions match
 
 var host = 'ws://mobile-to-chrome.herokuapp.com/';
 // var host = 'ws://192.168.1.2/';
 
-var TEST_FOR_DEAD = 10; // in seconds
+var wsSend = function (message) {
+    if (ws.readyState === ws.OPEN) {
+        ws.send(message);
+    }
+    else {
+        console.log('WS not open', message);
+    }
+};
+
+var TEST_FOR_DEAD = 60; // in seconds
 var registerID = function () {
-    ws.send(JSON.stringify({
+    wsSend(JSON.stringify({
         command: 'setID',
         id: localStorage.id,
         pass: localStorage.pass,
@@ -88,6 +97,7 @@ var createWS = function (){
         else if (obj.command === 'verifyVersion') {
             if (obj.EXTENSION_VERSION === EXTENSION_VERSION) {
                 console.log('Versions match, testing for connection');
+                TEST_FOR_DEAD = obj.TEST_FOR_DEAD;
                 matchVersion = true;
                 testConnection();
             }
@@ -95,7 +105,7 @@ var createWS = function (){
         else if (obj.command === 'checkIn') {
             lastCheckin = Date.now();
             console.log('Check in request');
-            ws.send(JSON.stringify({
+            wsSend(JSON.stringify({
                 command: 'checkingIn'
             }));
         }
@@ -123,14 +133,14 @@ var createWS = function (){
                     }
                 });
                 // Respond and let the server know that everything worked
-                ws.send(JSON.stringify({
+                wsSend(JSON.stringify({
                     command: 'respond',
                     resp: '200'
                 }));
             }
             else {
                 // Respond with unauthorized message
-                ws.send(JSON.stringify({
+                wsSend(JSON.stringify({
                     command: 'respond',
                     resp: '503'
                 }));

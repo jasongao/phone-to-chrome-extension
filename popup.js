@@ -4,7 +4,7 @@
     var clearHistory = document.getElementById('clearHistory');
 
     var uid = document.getElementById('uid');
-    uid.value = localStorage.id;
+    uid.value = localStorage.id || 'Loading..';
 
     var pass = document.getElementById('pass');
     if (localStorage.pass) {
