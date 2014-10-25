@@ -1,11 +1,20 @@
 localStorage.pass = localStorage.pass || '';
 var ws;
 
-var EXTENSION_VERSION = '0.1.5';
+var EXTENSION_VERSION = '0.1.8';
 var matchVersion = false; // Whether the host and the extension's versions match
 
 var host = 'ws://mobile-to-chrome.herokuapp.com/';
 // var host = 'ws://192.168.1.2/';
+
+// So here's the situation.
+// On laptops which you can just put to sleep, the extension obviously loses connection when the laptop goes to sleep,
+// but the WebSocket's onclose event never fires, so it never reconnects on its own.
+// To fix this, there's polling code that checks when the last time it polled was. If it's a lot longer, we've probably lost
+// connection, and we need to reconnect. 
+// That's what "lastTested" is about.
+var lastTested = Date.now();
+var TEST_DURATION = 5000; // Tests every 5s
 
 var wsSend = function (message) {
     if (ws.readyState === ws.OPEN) {
@@ -16,7 +25,15 @@ var wsSend = function (message) {
     }
 };
 
-var TEST_FOR_DEAD = 60; // in seconds
+var testStatus = function () {
+    if (Date.now() - lastTested > 2 * TEST_DURATION) {
+        console.log('Lost connection');
+        createWS();
+    }
+    lastTested = Date.now();
+    setTimeout(testStatus, TEST_DURATION);
+};
+
 var registerID = function () {
     wsSend(JSON.stringify({
         command: 'setID',
@@ -59,25 +76,11 @@ chrome.tabs.onUpdated.addListener(function (id, changeInfo, tab) {
     }
 });
 
-var lastCheckin = Date.now();
-var retrying = false;
-var testConnection = function () {
-    if (!matchVersion) {
-        return false;
-    }
-    if (retrying === false && Date.now() - lastCheckin > 2 * TEST_FOR_DEAD * 1000) {
-        console.log('Timed out. Retrying');
-        ws.onclose();
-    }
-    setTimeout(testConnection, TEST_FOR_DEAD * 1000);
-};
 
 var createWS = function (){
-    retrying = true;
 
     ws = new WebSocket(host);
     ws.onopen = function () {
-        retrying = false;
         console.log('Opened');
         registerID();
     };
@@ -96,21 +99,6 @@ var createWS = function (){
             console.log('Received id', obj.id);
             localStorage.id = obj.id;
             registerID();
-        }
-        else if (obj.command === 'verifyVersion') {
-            if (obj.EXTENSION_VERSION === EXTENSION_VERSION) {
-                console.log('Versions match, testing for connection');
-                TEST_FOR_DEAD = obj.TEST_FOR_DEAD;
-                matchVersion = true;
-                testConnection();
-            }
-        }
-        else if (obj.command === 'checkIn') {
-            lastCheckin = Date.now();
-            console.log('Check in request');
-            wsSend(JSON.stringify({
-                command: 'checkingIn'
-            }));
         }
         if (obj.url){
             if (localStorage.pass === obj.pass) {
@@ -159,3 +147,4 @@ var createWS = function (){
 };
 
 createWS();
+testStatus();
