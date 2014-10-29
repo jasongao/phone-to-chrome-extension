@@ -184,7 +184,7 @@ label {
   zoom:1; /* For IE 6/7 (trigger hasLayout) */
 }
 
-.uidDiv, .passDiv {
+.uid-div, .pass-div {
     float: left;
     width: 45%;
 }
